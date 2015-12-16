@@ -45,3 +45,77 @@ len - returns the length of a string, number of values in a dictionary or the nu
 
 # Variables
 var power int - Declaring a variable together with the variable type int
+
+Different ways you can initiate a variable:
+var power int
+power = 1000
+
+var power1 int = 2000
+
+power2 := 3000 - Also works with functions, Note that you can only do this once per variable since this is declaring and initiating
+power2 := somefunc()
+
+You can assing multiple variables at once:
+name, power := "Goku", 9000
+
+Just like imports Go wont let us compile with unused variables.
+Go also supports "Pointers"
+
+
+# Functions
+func name() TYPE - declaring a simple function where "TYPE" is the return value
+func name(message string) (int, string) - multiple return values
+
+Calling functions like
+_,testvar := name("Test Message") - For a return value we do not care about we can use '_' in this case that is the int value
+
+# Structures
+
+Go is not an Object Oriented language like C++ or Java.
+It doesnt have Objects, nor Inheritance neither polymorphism and overloading.
+
+Go uses structures which can be compared with Methods.
+Structures are very close to classes.
+
+type ourStruct struct {
+	Name string
+	Power int
+}
+
+We put our struct into a pointer like:
+ourVar := ourStruct{
+	Name: "Josh",
+	Power: 5000
+}
+Or:
+ourVar := ourStruct{Name: "Josh"}
+ourVar.Power = 5000
+Or:
+ourVar := ourStruct{"Josh", 5000}
+
+Pointers are a memory adress, the location of where to find the actual value.
+Its different of having the location of the house instead of the house.
+
+How to make a poiter:
+
+ourValue := &ourStruct{value, value, value} - The actual variable, using the & (Address of) operator.
+
+func ourFunc(aPointer *ourStruct) - The function that takes in a pointer and will be able to change the variable within the function. The * operator here means "Pointer to value of type X" in this case x = ourStruct
+
+We can bind a function to a struct by doing simply:
+
+type ourStruct struct {
+	...
+}
+
+func (s *ourStruct) boundFunc() {
+	
+}
+
+Here we are saying that type *ourStruct is the reciever of the boundFunc method, we can call it like this:
+testVar := &ourStruct{..}
+testVar.boundFunc()
+
+
+# Constructors
+TODO, Learn.. page 17
