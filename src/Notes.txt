@@ -1,0 +1,47 @@
+# Running and compiling code
+go run - Compiles and runs code at the same time.
+go build - If you explicitly want to compile the code. (Will create an executable that you can run on your linux machine)
+
+Example: go run main.go
+
+# Printing 
+
+println("Hello World") - Prints out a string to the console.
+
+# Entry point of program
+
+Just like C++ and Java Go has a function that will act as an entry point or a start
+point for the application, this is in go a function called Main that has to be in the package Main
+
+If you're making an application and running it with go run and have either not a package main or a 
+func main you will face an error. If you use go build and either are missing the code will still compile
+but the code will not run since there are not entry point for the application. This is popular when building
+an api
+
+Example:
+
+package main
+
+func main() {
+	println("Main Function")
+}
+
+# Imports
+
+You cannot get far without using Go's own libraries or even 3rd party libraries. 
+In go we use the keyword import to import libraries we wish to use.
+Go is strict when it comes to imports and will not run if you import a package and not use it. This is
+something you will have to get used to.
+
+Example:
+
+import (
+	"fmt"
+	"os"
+)
+
+# Strings
+len - returns the length of a string, number of values in a dictionary or the number of elements in a array.
+
+# Variables
+var power int - Declaring a variable together with the variable type int
