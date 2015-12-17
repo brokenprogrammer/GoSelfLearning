@@ -95,6 +95,8 @@ ourVar := ourStruct{"Josh", 5000}
 
 Pointers are a memory adress, the location of where to find the actual value.
 Its different of having the location of the house instead of the house.
+&variable = the memory adress
+*TYPE = A pointer of the type, example: *int - Takes a integer adress.
 
 How to make a poiter:
 
@@ -118,4 +120,51 @@ testVar.boundFunc()
 
 
 # Constructors
-TODO, Learn.. page 17
+Constructors can be created through either new(Person) or through an factory function that returns a new value
+of the struct.
+
+# Composition
+A struct can have any types within it. Composition reminds of Inherritance
+
+type Person struct{
+	Name string
+}
+
+func (p *Person) Introduce(){
+	fmt.Println("Hello", p.Name)
+}
+
+type Superman struct{
+	*Person
+	Power int
+}
+
+strangeGuy := &Superman{
+	Person: &Person{"IronMan"},
+	Power: 3534,
+}
+
+strangeGuy.Introduce() //This works even strangeGuy is a type of Superman but it can use the functions of the included Person struct. The Superman structure have a field of the type *Person because we didnt give it an explicit field name we can access the fields and functions of the composed type. Go did under the hood give it a field name so consider both valid:
+
+fmt.Println(strangeGuy.Name)
+fmt.Println(strangeGuy.Person.Name)
+
+# Overloading 
+Go does not support overloading thats why you will see yourself writing alot of functions like
+Load, LoadById, LoadByName and so on.
+However because Composition is just a trick we can "overwrite" struct bound functions.
+For example if Person has like above a Introduce() function we could extend the above code with
+
+func (s *Superman) Introduce(){
+	fmt.Println("Hello", s.Name)
+}
+
+The old Introduce will still be available through 
+s.Person.Introduce()
+
+# Pointer vs Values
+Should this be a value or a pointer to a value?
+First of all if you are not sure then use a Pointer,
+
+Values are a good way to pass data which is Immutable(Changes made inside the function wont affect the rest of the code) sometimes that will be the feature you're looking for but more often you will want to use Pointers.
+
