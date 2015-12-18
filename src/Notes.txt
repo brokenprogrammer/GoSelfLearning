@@ -168,3 +168,4 @@ First of all if you are not sure then use a Pointer,
 
 Values are a good way to pass data which is Immutable(Changes made inside the function wont affect the rest of the code) sometimes that will be the feature you're looking for but more often you will want to use Pointers.
 
+# Arrays

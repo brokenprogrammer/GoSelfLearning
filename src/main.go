@@ -127,6 +127,8 @@ func main() {
 	fmt.Println(strangeGuy.Name)        //Prints the name of the strange guy
 	fmt.Println(strangeGuy.Person.Name) //Prints the name of the strange guy
 
+	//Arrays
+
 	os.Exit(1)
 }
 
