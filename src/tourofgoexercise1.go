@@ -1,5 +1,5 @@
 /*###########################################
-  # Using a for loop to get the Square Root of a value
+  # Using a for loop to get the Square Root of a value.
   ###########################################*/
 package main
 
@@ -19,7 +19,7 @@ func Sqrt(x float64) float64 {
 	//D is our delta value, its the difference so we know when our loop ends.
 	d := float64(1)
 
-	//The loop will continue while the delta value is higher than 10^-10.
+	//The loop will continue while the delta value is higher than 10^-10. Aka there is barely a difference
 	for d > 10E-10 {
 		//z0 will be used to compare new and old z values.
 		z0 := z
@@ -35,7 +35,8 @@ func Sqrt(x float64) float64 {
 		//Delta can become both a negative value and a positive, here we make the value
 		//Positive if it is negative already so the loop can continue.
 		if d < 0 {
-			d = -d
+			//	d = -d
+			d = math.Abs(d) //There is two ways of making the delta value positive, the math function or the above
 		}
 	}
 
