@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
+	"sort"
 )
 
 type Person struct { //A struct, Like an object or in this language like a class.
@@ -127,8 +129,51 @@ func main() {
 	fmt.Println(strangeGuy.Name)        //Prints the name of the strange guy
 	fmt.Println(strangeGuy.Person.Name) //Prints the name of the strange guy
 
-	//Arrays
+	//#############################################################
+	//# Day 4 Arrays, Slices, Copy, Make(TYPE, len, cap)
+	//#############################################################
 
+	//Creating a new array
+	//var myArray [10]int
+
+	//Creating a new slice
+	//mySlice := []int{1, 5, 10}
+
+	//Using make instead of new since new is allocating memory.
+	//Make(type, length, capacity)
+	mySecondSlice := make([]int, 1, 10)
+	//The length is made so that we cannot access all of it through varName[x] we have to use append to add values to it.
+	mySecondSlice[0] = 120                     //Works since the length is 1
+	mySecondSlice = append(mySecondSlice, 510) //After that we have to use append
+	fmt.Println("My Second Slice: ", mySecondSlice)
+
+	//Luckily for us we can reslice our slice if we would like
+	mySecondSlice = mySecondSlice[2:5]
+	mySecondSlice[1] = 240
+
+	fmt.Println("My Second Re-Sliced: ", mySecondSlice)
+
+	//Append is though so special that we do not really have to do it like this
+	//When appending to a full slice append will create a new larger slice and copy the old values into it.
+	//Exactly how dynamic arrays work in Python, PHP and Ruby.
+
+	//Copy is our way of copying a part of a slice to another, this is something that is easier in go than other languages
+	scores := make([]int, 100) //length of 100
+
+	for i := 0; i < len(scores); i++ {
+		scores[i] = int(rand.Int31n(100)) //Giving all of scores random values
+	}
+
+	sort.Ints(scores) //Sorting the values in scores
+
+	//Worst scores will hold the 5 worst scores from the scores slice
+	worstScores := make([]int, 5) //has the length of 5
+
+	//Copy to worstScores, the scores from start to 5.
+	copy(worstScores[:], scores[:5]) //If i try to copy more than 5 values they just wont get copied to worstScores
+	//Copying less values wont fill the entire worstScores slice and you can specify where in worstScores you want
+	//The values to be copied to.
+	fmt.Println("Worst scores: ", worstScores)
 	os.Exit(1)
 }
 

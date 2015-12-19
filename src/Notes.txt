@@ -169,7 +169,52 @@ First of all if you are not sure then use a Pointer,
 Values are a good way to pass data which is Immutable(Changes made inside the function wont affect the rest of the code) sometimes that will be the feature you're looking for but more often you will want to use Pointers.
 
 # Arrays
+Arrays are not like you're used to in PHP for example where they are dynamic. In Go arrays are static and has to have a specified value.
+
+Example:
+var scores [10]int
+scores[0] = 123
+
+You can use the keyword "len" to get the length of an array or the keyword range to itterate over it:
+for index, value := range scores {
+	
+}
+
+Arrays are efficient but oftean we do not knowthe exact ammount of values we want to store within the array.
+For that we turn to slices.
 
 # Slices
+In Go slices are more popular than arrays. 
+Example of how to create a slice:
+
+scores := []int{1, 4 ,1123, 50}
+
+You can also use the keyword make to create a slice, You could also do it with the new keyword but the new keyword is for allicating memory and there is more to creating slices than that.
+
+Make syntax: make(TYPE, length, capacity)
+scores := make([]int, 10)
+This will create a slice with the length of 10 and the capacity of 10.
+
+Note to take is that the length function is overloaded inside the 2nd parameter of make.
+
+There are four common ways to initialize a slice
+names:= []string{"Leto", "John"}
+checks := make([]bool, 10)
+var names []string
+scores := make([]int, 0, 10)
+
+The first one could be used when you know the values
+
+The second one could be used when you will be writing into specific indexes of a slice,
+for example if you would be itterating over another array you could in this case switch 10 to len(target)
+
+The Third could be used with append when the number of elements are unknown.
+
+Lastly the fourth usefull is we have a general idea of how big slice we will need.
+
+With slices we have to remember that we will use [:] alot where
+[X:] = From X to the end
+[:X] = From start to X
 
 # Maps
+Maps in Go are what other languages call Hashes or dictionaries.
