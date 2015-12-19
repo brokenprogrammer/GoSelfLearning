@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"os"
 	"sort"
+	"store" //src/store package within this directory
 )
 
 type Person struct { //A struct, Like an object or in this language like a class.
@@ -174,6 +175,53 @@ func main() {
 	//Copying less values wont fill the entire worstScores slice and you can specify where in worstScores you want
 	//The values to be copied to.
 	fmt.Println("Worst scores: ", worstScores)
+
+	//Creating a new map, maps grow dynamically but we can just like with the slices specify a length if we want.
+	//If you know how many positions you will need it can be a good idea to specify for performance.
+	myMap := make(map[string]int)
+	myMap["Paris"] = 5001
+
+	/*myMap["Warsaw"] will return 2 values, the int value bound to the specified key and a boolean (Exists)
+	This here is a great example of how Go's multiple return values work, If i would like to not care of a value
+	Being returned i would use the _, like the book previously mentioned.*/
+	myMapCity, myMapDistance := myMap["Paris"]
+	myMapSize := len(myMap)
+
+	fmt.Println("My Maps:")
+	fmt.Println("Paris: ", myMapCity, myMapDistance) //Prints out the value bound to Paris and if it exists or not
+	fmt.Println("MapSize: ", myMapSize)
+
+	//This is how you would delete a value from the map
+	delete(myMap, "Paris")
+
+	fmt.Println("New MapSize: ", len(myMap))
+
+	//Another way to initialize maps
+	newMap := map[string]int{
+		"England": 1024,
+		"Germany": 502,
+		"Russia":  5000,
+	}
+
+	fmt.Println("Itterating over a new map: ")
+
+	//We can itterate over the map using a for loop with range but it will return it in a random order:
+	for key, value := range newMap {
+		fmt.Println(key, value)
+	}
+
+	fmt.Println("---USING THE IMPORTED STORE PACKAGE---")
+	fmt.Println(store.PriceCheck(1))
+	fmt.Println(store.PriceCheck(2))
+	fmt.Println(store.PriceCheck(3))
+	fmt.Println("---CHANGING PRICES---")
+	store.SetPrice(1, 12.5)
+	store.SetPrice(2, 150)
+	store.SetPrice(3, 12345)
+	fmt.Println(store.PriceCheck(1))
+	fmt.Println(store.PriceCheck(2))
+	fmt.Println(store.PriceCheck(3))
+
 	os.Exit(1)
 }
 

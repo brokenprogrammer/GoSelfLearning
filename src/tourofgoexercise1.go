@@ -9,7 +9,7 @@ import (
 )
 
 /*
-	Function that we use in this exercise to get the Square root of something.
+	Function that we use in this exercise to get the Square root of a specified value.
 	Sqrt returns the square root of x.
 */
 func Sqrt(x float64) float64 {

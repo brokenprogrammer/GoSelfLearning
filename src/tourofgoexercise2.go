@@ -1,5 +1,5 @@
 /*###########################################
-  # Using a for loop combined with slices to draw an image.
+  # Using slices to draw an image.
   ###########################################*/
 package main
 

@@ -1,3 +1,14 @@
+#############################################################
+## 						Golang Notes
+##
+## For me the best way to learn has always been to write down
+## the things i want to learn. It helps me remember, this is
+## a big text document where i will store all the notes i take
+## while reading, listening and watching educating material
+## for Golang. 
+##
+#############################################################
+
 # Running and compiling code
 go run - Compiles and runs code at the same time.
 go build - If you explicitly want to compile the code. (Will create an executable that you can run on your linux machine)
@@ -175,7 +186,7 @@ Example:
 var scores [10]int
 scores[0] = 123
 
-You can use the keyword "len" to get the length of an array or the keyword range to itterate over it:
+You can use the keyword "len" to get the length of an array or the keyword range to itterate over it, the return values from range is (index, value):
 for index, value := range scores {
 	
 }
@@ -216,5 +227,56 @@ With slices we have to remember that we will use [:] alot where
 [X:] = From X to the end
 [:X] = From start to X
 
+This is also true when we use the copy keyword which is really intresting. 
+The syntax for copy works like: 
+copy(destination, target[start:end])
+
+You can also specify to where in the destination you want the target to be copied:
+copy(destination[X:], target[a:b])
+
+
 # Maps
 Maps in Go are what other languages call Hashes or dictionaries.
+They work just as you would expect with a key value setup.
+
+Maps can be initialized like:
+
+newMap = make(map[string]int)
+or
+newerMap = map[string]int{
+	"Key1": 123,
+	"Key2": 321
+}
+
+You can specify a length when creating a map if you know the ammount of values, this can help with performance.
+
+When you have a map initialized you can set values to it like:
+newMap["AKey"] = 100
+newMap["AnotherKey"] = 200
+
+len(newMap) will return the size of the map.
+
+Something i found intresting is how i now learned how the functions multiple returns work, for example we could do:
+newVariable, exists := newMap["SomeKey"]
+The newVariable will recieve the value of the key "SomeKey" and the exists variable will be given a boolean depending on if the key exists in the map.
+
+Itteration over maps can be done like:
+for key, value := range newMap {
+		fmt.Println(key, value)
+	}
+Notice though that the keys will be taken in random order.
+
+# Pointers vs Values
+When it comes to maps and slices and arrays which of the following should you use
+
+a := make([]Person, 10)
+b:= make([]*Person, 10)
+
+Here the reason you would choose b is when you would modify the values inside b. The decision lies upon not how you handle the array map or slice itslef but how you handle the values within it.
+
+#Code Organization and Interfaces
+
+Packages is a way to stucture and organize your application. In Go package names follow the directory structure. For example if we would create a new shopping library we would start with the directory $GOPATH/src/shopping and then isolate some other logic within that folder for example database logic could be added to $GOPATH/src/shopping/db there the package specified in the file would simply be db but when importing this package it would be shopping/db.
+
+So when naming packages inside files you use a single value but when importing you use the whole path.
+
