@@ -131,7 +131,7 @@ func main() {
 	fmt.Println(strangeGuy.Person.Name) //Prints the name of the strange guy
 
 	//#############################################################
-	//# Day 4 Arrays, Slices, Copy, Make(TYPE, len, cap)
+	//# Day 4 Arrays, Slices, Copy, Make(TYPE, len, cap), Maps
 	//#############################################################
 
 	//Creating a new array
@@ -210,18 +210,35 @@ func main() {
 		fmt.Println(key, value)
 	}
 
-	fmt.Println("---USING THE IMPORTED STORE PACKAGE---")
-	fmt.Println(store.PriceCheck(1))
-	fmt.Println(store.PriceCheck(2))
-	fmt.Println(store.PriceCheck(3))
-	fmt.Println("---CHANGING PRICES---")
-	store.SetPrice(1, 12.5)
-	store.SetPrice(2, 150)
-	store.SetPrice(3, 12345)
-	fmt.Println(store.PriceCheck(1))
-	fmt.Println(store.PriceCheck(2))
-	fmt.Println(store.PriceCheck(3))
+	/*
+		Theese functions does not work anymore since the code was changed. Now you first have to add the product
+		for it to exist, trying to check the price of item with id 1 before it existed will ressult in a false message.
 
+		Now you have to do store.AddItem(name, price, popular) and then the item will be added with an incremented id.
+
+			fmt.Println("---USING THE IMPORTED STORE PACKAGE---")
+			fmt.Println(store.PriceCheck(1))
+			fmt.Println(store.PriceCheck(2))
+			fmt.Println(store.PriceCheck(3))
+			fmt.Println("---CHANGING PRICES---")
+			store.SetPrice(1, 12.5)
+			store.SetPrice(2, 150)
+			store.SetPrice(3, 12345)
+			fmt.Println(store.PriceCheck(1))
+			fmt.Println(store.PriceCheck(2))
+			fmt.Println(store.PriceCheck(3))
+	*/
+
+	//#############################################################
+	//# Day 5 Bok page 34
+	//#############################################################
+	fmt.Println("---TRYING NEW FUNCTIONS---")
+	fmt.Println(store.AddItem("Shoe", 500, true))
+	fmt.Println(store.AddItem("Cat", 10.4, false))
+	fmt.Println(store.AddItem("Hat", 1025, true))
+	fmt.Println(store.PriceCheck(3))
+	store.SetPrice(3, 1.5)
+	fmt.Println(store.PriceCheck(3))
 	os.Exit(1)
 }
 
