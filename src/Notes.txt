@@ -280,3 +280,5 @@ Packages is a way to stucture and organize your application. In Go package names
 
 So when naming packages inside files you use a single value but when importing you use the whole path.
 
+###
+Tour of go: Methods 1 / 17
