@@ -9,6 +9,14 @@ import (
 var ItemDB = make(map[int]*models.Item)
 
 /*
+	Function that will be used when returning the entire ItemDB
+	This will return the entire map so we can use it.
+*/
+func GetItems() map[int]*models.Item {
+	return ItemDB
+}
+
+/*
 	Function that will be used when creating new Items.
 	This function will accept an item name, price and a boolean if its popular or not.
 	Then the item will be created by checking the length of our ItemDB map and the incrementing the value so we get
@@ -22,9 +30,18 @@ func CreateItem(name string, price float64, popular bool) (int, *models.Item) {
 		Popular: popular, //Popular or not
 	}
 
+	//A for loop looping through the entire map to check if there already is an item with the specified name
+	for index, _ := range ItemDB {
+		if ItemDB[index].Name == name {
+			item = nil //Setting the item to nil
+		}
+	}
+
 	//Adding the newly created item to the map by setting the ID as the maps length + 1 so it acts as
 	//an incremented number
-	ItemDB[len(ItemDB)+1] = item
+	if item != nil {
+		ItemDB[len(ItemDB)+1] = item //If the item is not nil (Already exists) we add it
+	}
 
 	//Return the id of the item as well as the item itself.
 	return len(ItemDB), item
@@ -54,12 +71,3 @@ func LoadItem(id int) *models.Item {
 	//Return the item from the ItemDB map.
 	return ItemDB[id]
 }
-
-//TODO:
-// x Make a model directory where the Item model will be stored.
-// x Add data to the Item struct such as Item Name and something more
-// X Make a function for initializing a new Item so that LoadItem function doesnt have to do it.
-//Add error logging in pricecheck.go and db.go
-//Add a function to retrieve all items
-//Check if an item already exists when creating a new item
-//Think twice if the structure of this application is really optimal.

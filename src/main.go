@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"os"
 	"sort"
 	"store" //src/store package within this directory
 )
@@ -230,7 +229,7 @@ func main() {
 	*/
 
 	//#############################################################
-	//# Day 5 Bok page 34
+	//# Day 5 Worked with packages, Error handling and Defer
 	//#############################################################
 	fmt.Println("---TRYING NEW FUNCTIONS---")
 	fmt.Println(store.AddItem("Shoe", 500, true))
@@ -239,7 +238,52 @@ func main() {
 	fmt.Println(store.PriceCheck(3))
 	store.SetPrice(3, 1.5)
 	fmt.Println(store.PriceCheck(3))
-	os.Exit(1)
+
+	fmt.Println("---TESTING ERRORS---")
+
+	fmt.Println(store.SetPrice(15, 120)) //Should report an erro message since item id 15 doesnt exist
+
+	_, err := store.SetPrice(6, 55) //Setting the price and if there is an error we print it out.
+	if err != nil {
+		fmt.Println(err) //If there is an error we print it out.
+	}
+
+	_, err = store.PriceCheck(15) //Checking the price of an item that is not created.
+	if err != nil {
+		fmt.Println(err) //If there is an error we print it out.
+	}
+
+	fmt.Println("---TESTING VIEWING FUNCTIONS---")
+	fmt.Println(store.ShowItem(1))
+	fmt.Println(store.ShowItem(2))
+	fmt.Println(store.ShowItem(3))
+
+	fmt.Println("---SHOWING ALL ENTRIES---")
+	store.ShowAllItems()
+	fmt.Println(store.AddItem("Box", 10.5, false))
+	fmt.Println(store.AddItem("Dog", 5, true))
+	fmt.Println(store.AddItem("Hat", 50, false)) //Returns an error since there already is an Hat item.
+
+	fmt.Println("---LEARNING ABOUT DEFER")
+
+	//Defer keyword will run a function or statement when the function it is used in returns.
+	defer deferFunction()
+
+	//Initialized if statements, initialize a value and use it inside the statement:
+	if x := 10; 5 < x {
+		fmt.Println("x is larger than 5")
+	}
+
+	/*
+		That might be a silly example but more realistically you can do something like:
+		if err := process(); err != nil{
+			return err
+		}
+		Theese values are not available outside the if statement, but they are available in the
+		else if and else statements.
+	*/
+
+	//Go book p 40...
 }
 
 func getValue() int { //Simple function that returns an integer
@@ -300,4 +344,10 @@ func (p *Person) Introduce() {
 //Our overwritten Introduce function which overwrites the Person structures introduce function, Note that the old is still accessable.
 func (s *SuperPerson) Introduce() {
 	fmt.Println("Hello Super, ", s.Name)
+}
+
+//When using the defer keyword we can make a function or statement run when the function returns.
+//This function is defered by the main function. So this will get printed when the main function ends.
+func deferFunction() {
+	fmt.Println("Inside the 'deferFunction'!, The main function is ending.")
 }
