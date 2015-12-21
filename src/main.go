@@ -5,6 +5,8 @@ import (
 	"math/rand"
 	"sort"
 	"store" //src/store package within this directory
+	"sync"
+	"time"
 )
 
 type Person struct { //A struct, Like an object or in this language like a class.
@@ -283,7 +285,179 @@ func main() {
 		else if and else statements.
 	*/
 
-	//Go book p 40...
+	//#############################################################
+	//# Day 6 Interfaces, Type Function, Concurrency, Go Routines, Channels
+	//#############################################################
+
+	//Empty interfaces and conversion
+	fmt.Println("---TESTING INTERFACE CONVERSION---")
+	fmt.Printf("5 + 5 via interface function returns: %d \n", addViaInterface(5, 5))
+
+	//String and byte arrays
+	stra := "The spices flow hot"
+	bytes := []byte(stra)                               //Converting the stra string to the byte type
+	strb := string(bytes)                               //Converting the byte splice into a string again.
+	fmt.Println("The string in bytes: ", bytes)         //Print out the byte values of the string
+	fmt.Println("The string in normal letters: ", strb) //Print out the normal string again
+
+	//Functions are first class types and if you declare a type function you can use it for several different things
+	fmt.Println(process(func(a int, b int) int {
+		return a - b //Using functions like this can decouple code like we can achieve with interfaces
+	}))
+
+	//Concurrecy
+	fmt.Println("---CONCURRENCY---")
+
+	//Goroutines are like threads and can run concurrent with other processes within Go
+	fmt.Println("Start")
+	go goProcess() //Run goProcess() as a go routine
+	go func() {    //Another way to just run a small piece of code with go routines
+		fmt.Println("Another go routine process!")
+	}()
+	time.Sleep(time.Millisecond * 10) //This is bad code and should not be done
+	fmt.Println("Done")
+
+	/*
+		Here we will notice that removing the sleep will make our Go routines not execute. This is
+		because the rest of the code will not wait for our routines to run. This is solved by
+		cordination in our code.
+
+		When wrinting concurrent code it is important to look at how we use values since its like programming
+		without a garbage collector.
+
+		Consider this code:
+		counter = 0;
+		for i:= 0; i < 2; i++{
+			go incr()
+		}
+		time.Sleep(time.Millisecond * 10)
+
+		func incr(){
+			counter++
+			fmt.println(counter)
+		}
+
+		This code is dangerous since we have multiple go routines in this case 2 writing to the same
+		variable. It is possible with system crashes if go routines is used wrong. The safest thing is
+		to just read from variables in go routines. If we want to write as well we need to be using
+		synchronization.
+		We can do this through some truly atomic operations that rely on CPU instructions or use a mutex. A
+		mutex serializes access to code under a lock.
+
+		First we imprt "sync"
+	*/
+	fmt.Println("---SYNCHRONIZED GOROUTINE---")
+	for i := 0; i < 5; i++ {
+		go incr()
+	}
+
+	time.Sleep(time.Millisecond * 10)
+
+	//When not being carefull with locks its possible to creating a deadlock which retuns a fatal error.
+	//go func() { lock.Lock() }()
+	//time.Sleep(time.Millisecond * 10)
+	//lock.Lock()
+
+	//If we want a value that should be used by many routines at once but we want to declare a lock specified
+	//for either reading or writing we can use a "read-write" Mutex. An example of that is sync.RWMutex, it has
+	//same functions as sync.Mutex but also supports lock.RLock() and WLock() r for read and w for write.
+	//This is where it gets hard for developers, we do now not only have to look at who uses the data but how they use it.
+
+	fmt.Println("---CHANNELS---")
+	//Channels help us make concurrent programming easier and cleaner as well as less error prone.
+
+	//A Channel is a comunication pipe between go routines. The challenge with concurrent programming is data
+	//sharing and channels is a way to share data between the go routines. If your go routines share no data then
+	//there is no need for syncronization but sharing data is the goal for most systems.
+
+	//A GoRoutine that has data can pass it to another GoRoutine through a channel. The ressult is that only 1
+	//GoRoutine at the time has access to the data.
+
+	c := make(chan int) //A channel like everything else has a type, This is how to create a channel for ints.
+
+	//Channels support 2 operations recieving and sending, We send to a channel by doing:
+	//c <- 50
+	//And Recieving from one by doing:
+	//VAR := <- c //The arrow points in the direction the data flows.
+
+	for i := 0; i < 5; i++ {
+		worker := &Worker{id: i} //Create 5 workers
+		go worker.aProcess(c)    //Run the function which is bound to the worker structure and let it use the c channel
+	}
+
+	for a := 0; a <= 50; a++ { //Infinite loop
+		select { //Select can be used with multiple channels unblocking and blocking depending on which is available.
+		case c <- a:
+
+		case <-time.After(time.Millisecond * 100):
+			fmt.Println("Timed out")
+
+			/*default:
+			//When the data is being dropped
+			fmt.Println("dropped") */
+		}
+		//c <- a //Give the channel the value of the current loop
+		//fmt.Println(len(c))
+		time.Sleep(time.Millisecond * 10)
+	}
+
+	//Buffered channels
+	//If we would make the function looped by each GoRoutine sleep for a long time then it would recieve more
+	//data then it should.
+	//What would happend is our main code, the one that accepts the users incoming data which in this case is simulated
+	//by the 50 loop numbers. What would happend is that the channel would be blocking it since there is no room for more data.
+	//we could change our channel to: c := make(chan int, 100) This is called buffering the data, but it is proccesing a bit choppy.
+	//What we are doing is storing the data in some kind of queue.
+
+	//Select, When buffering sometimes we have to drop values. We cannot use up infinite ammount of memory
+	//hoping a worker frees up, for this we use Go's Select
+
+	//When using Select to drop messages or buffering is option we can also use Timeout.
+
+	//Things that are unclear and i will have to go over again: GoRoutines, Channels, Buffered Channels, Select, Timeout, Drop
+}
+
+type Worker struct {
+	id int
+}
+
+//Function that initiates an infinite process. It takes in an channel and will print out what worker got which value
+//
+func (w *Worker) aProcess(c chan int) {
+	for { //This is done in a loop so it forever waits for more data to process
+		data := <-c //Set the data which is going to be printed out to the value inside the channel.
+		fmt.Printf("Worker %d got %d \n", w.id, data)
+		time.Sleep(time.Millisecond * 500) //Make the goroutines sleep so the input in c will start stacking up.
+	}
+}
+
+//Our channels can be passed into functions, just type in what type you chan is like this:
+func worker(c chan int) {
+
+}
+
+var (
+	counter = 0
+	lock    sync.Mutex //Default value to sync.Mutex is unlocked
+)
+
+func incr() {
+	lock.Lock() // I guess this locks the value to only be used within this goroutine.
+	defer lock.Unlock()
+	counter++
+	fmt.Println(counter)
+}
+
+// Converting between values is not clean code but in a statically typed language it is sometimes something
+//that you have to do.
+func addViaInterface(a interface{}, b interface{}) interface{} {
+	return a.(int) + b.(int) //Converts the input into integers and returns the sum of the values
+}
+
+type Minus func(a int, b int) int //A function type that can be used in the parameters of a function
+
+func process(minus Minus) int { //a function that takes in a type function in the parameters
+	return minus(5, 2)
 }
 
 func getValue() int { //Simple function that returns an integer
@@ -350,4 +524,8 @@ func (s *SuperPerson) Introduce() {
 //This function is defered by the main function. So this will get printed when the main function ends.
 func deferFunction() {
 	fmt.Println("Inside the 'deferFunction'!, The main function is ending.")
+}
+
+func goProcess() {
+	fmt.Println("Go routine process!")
 }
