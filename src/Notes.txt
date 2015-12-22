@@ -280,5 +280,15 @@ Packages is a way to stucture and organize your application. In Go package names
 
 So when naming packages inside files you use a single value but when importing you use the whole path.
 
-###
-Tour of go: Methods 1 / 17
+# Stringers & Error Methods
+
+Something i quite not understand. 
+Looking at this below:
+
+type ErrNegativeSqrt float64
+func (e ErrNegativeSqrt) Error() string {
+	return fmt.Sprintf("Cannot Sqrt negative number: %g", float64(e))
+}
+
+If another function returns and error we can use our newly created type as an erro message.
+Stringers work in about the same way.
