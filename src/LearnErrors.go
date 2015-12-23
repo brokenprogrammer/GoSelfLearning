@@ -22,6 +22,29 @@ import (
 	Stringer is implemented by any value that has a String method, which defines the “native” format for that value.
 	The String method is used to print values passed as an operand to any format that accepts a
 	string or to an unformatted printer such as Print.
+
+	Some other intresting points the Error Handling article brings up is:
+
+	The standard error interface is built like this:
+	type error interface {
+    	Error() string
+	}
+
+	Go is allowing us to create a richer model of the error type and provide some context to the errors we create
+	For example os.PathError which is returned on os.Open looks like this:
+	type PathError struct {
+    	Op string    // "open", "unlink", etc.
+    	Path string  // The associated file.
+    	Err error    // Returned by the system call.
+	}
+
+	func (e *PathError) Error() string {
+    	return e.Op + " " + e.Path + ": " + e.Err.Error()
+	}
+
+	This is returning an error together with the Path that caused the error. Creating your own error types is basically
+	extending the existing error model.
+
 */
 type ShortStringError string
 

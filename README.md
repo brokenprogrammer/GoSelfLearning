@@ -9,6 +9,8 @@ I will also update with resources ive read so far.
 
 [Error Handling](http://blog.golang.org/error-handling-and-go)
 
+[Golang book: Concurrency](https://www.golang-book.com/books/intro/10)
+
 # Books
 [The Little Go Book](http://openmymind.net/assets/go/go.pdf)
 
