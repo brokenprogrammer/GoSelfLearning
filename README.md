@@ -11,6 +11,8 @@ I will also update with resources ive read so far.
 
 [Golang book: Concurrency](https://www.golang-book.com/books/intro/10)
 
+[50 Shades Of Go](http://devs.cloudimmunity.com/gotchas-and-common-mistakes-in-go-golang/)
+
 # Books
 [The Little Go Book](http://openmymind.net/assets/go/go.pdf)
 

@@ -14,12 +14,13 @@ import (
 	"strings" //https://golang.org/pkg/strings
 )
 
+//The structure for the IRC Watcher
 type Watcher struct {
-	server  string
-	port    string
-	nick    string
-	channel string
-	conn    net.Conn
+	server  string   //Server adress
+	port    string   //Server Port
+	nick    string   //Watchers Nickname
+	channel string   //Channel to join
+	conn    net.Conn //Connection
 }
 
 //A factory function for our Watcher structure
@@ -64,8 +65,8 @@ func main() {
 	conn.Write([]byte("JOIN " + bot.channel + "\r\n"))                      //Using the irc JOIN command to join the channel our bot uses.
 	conn.Write([]byte("PRIVMSG " + bot.channel + " :Hello World!\r\n"))
 
-	//Using a Go Routine to handle a Controll Panel for the bot simmultaniously as the bot is running
-	go ControllPanel(conn, bot)
+	//Using a Go Routine to handle a Control Panel for the bot simultaniously as the bot is running
+	go ControlPanel(conn, bot)
 
 	//The bufio reader will read data we get from our connection and return it as a string.
 	connBuff := bufio.NewReader(conn)
@@ -89,8 +90,8 @@ func main() {
 	}
 }
 
-//Experimenting with a ControllPanel for the bot.
-func ControllPanel(conn net.Conn, bot *Watcher) {
+//Experimenting with a ControlPanel for the bot.
+func ControlPanel(conn net.Conn, bot *Watcher) {
 	for {
 		fmt.Println("Waiting for input: ")
 
